@@ -6,11 +6,7 @@
 
 ---
 
-## 👨‍💻 Built by
-**Sadhuram Agarwal** — ML Backend Lead  
-CMR Institute of Technology, Bengaluru · BE ISE 6th Sem · CGPA 9.0
 
-Team: Aman Shekhar (Leader) · Anushka Sinha · Abhishek Tiwari
 
 ---
 
