@@ -1,0 +1,12 @@
+flask
+flask-cors
+python-dotenv
+xgboost
+shap
+scikit-learn
+imbalanced-learn
+optuna
+pandas
+numpy
+joblib
+google-genai

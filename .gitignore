@@ -1,0 +1,7 @@
+.env
+venv/
+__pycache__/
+*.pyc
+ngrok.exe
+vaani_seva_training.csv
+best_params.json
