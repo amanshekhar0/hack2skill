@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../providers/language_provider.dart';
 import '../providers/prediction_provider.dart';
+import '../utils/translations.dart';
 import '../services/pdf_service.dart';
 import '../theme/app_colors.dart';
 import '../widgets/eligibility_banner.dart';
@@ -93,16 +94,14 @@ class _ResultsScreenState extends State<ResultsScreen> {
 
     if (result == null) {
       return Scaffold(
-        backgroundColor: AppColors.background,
         appBar: AppBar(title: const Text('Results')),
         body: const Center(child: CircularProgressIndicator()),
       );
     }
 
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Your Results'),
+        title: Text(TranslationHelper.t('Your Results', context.read<LanguageProvider>().languageName)),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_rounded),
           onPressed: () => Navigator.pop(context),
@@ -137,9 +136,9 @@ class _ResultsScreenState extends State<ResultsScreen> {
                       width: double.infinity,
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: AppColors.surface,
+                        color: Theme.of(context).colorScheme.surface,
                         borderRadius: BorderRadius.circular(14),
-                        border: Border.all(color: AppColors.border),
+                        border: Border.all(color: Theme.of(context).dividerColor),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,7 +149,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                                   color: AppColors.primary, size: 18),
                               const SizedBox(width: 8),
                               Text(
-                                'AI Message',
+                                TranslationHelper.t('AI Message', context.read<LanguageProvider>().languageName),
                                 style: GoogleFonts.inter(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w700,
@@ -164,7 +163,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                             result.voiceUiMessage,
                             style: GoogleFonts.inter(
                               fontSize: 14,
-                              color: AppColors.textPrimary,
+                              color: Theme.of(context).textTheme.bodyLarge?.color,
                               height: 1.5,
                             ),
                           ),
@@ -179,11 +178,11 @@ class _ResultsScreenState extends State<ResultsScreen> {
                             color: AppColors.primary, size: 18),
                         const SizedBox(width: 8),
                         Text(
-                          'Matching Schemes (${result.matchingSchemes.length})',
+                          TranslationHelper.t('Matching Schemes', context.read<LanguageProvider>().languageName) + ' (${result.matchingSchemes.length})',
                           style: GoogleFonts.inter(
                             fontSize: 15,
                             fontWeight: FontWeight.w700,
-                            color: AppColors.textPrimary,
+                            color: Theme.of(context).textTheme.bodyLarge?.color,
                           ),
                         ),
                       ],
@@ -200,7 +199,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                   ElevatedButton.icon(
                     onPressed: _generatePdf,
                     icon: const Icon(Icons.picture_as_pdf_rounded),
-                    label: const Text('Generate Application Form PDF'),
+                    label: Text(TranslationHelper.t('Generate Documents', context.read<LanguageProvider>().languageName)),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF0D47A1),
                       foregroundColor: Colors.white,
@@ -218,7 +217,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                           context, (route) => route.isFirst);
                     },
                     icon: const Icon(Icons.refresh_rounded),
-                    label: const Text('Check Again'),
+                    label: Text(TranslationHelper.t('Check Again', context.read<LanguageProvider>().languageName)),
                     style: OutlinedButton.styleFrom(
                       foregroundColor: AppColors.primary,
                       side: const BorderSide(color: AppColors.primary),

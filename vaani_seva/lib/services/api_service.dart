@@ -6,8 +6,7 @@ import '../models/prediction_request.dart';
 import '../models/prediction_response.dart';
 
 class ApiService {
-  static const String _baseUrl =
-      'https://volatilisable-demetrice-unchambered.ngrok-free.dev';
+  static const String _baseUrl = 'http://127.0.0.1:5000';
   static const Duration _timeout = Duration(seconds: 15);
 
   static final Map<String, String> _headers = {
@@ -50,7 +49,29 @@ class ApiService {
       return null;
     } on SocketException {
       return null;
-    } catch (_) {
+    } catch (e) {
+      print('API Error: $e');
+      return null;
+    }
+  }
+
+  static Future<Map<String, dynamic>?> parseSpeech(String text) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$_baseUrl/parse_voice'),
+        headers: _headers,
+        body: jsonEncode({"text": text}),
+      ).timeout(_timeout);
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data['status'] == 'success') {
+          return data['data'];
+        }
+      }
+      return null;
+    } catch (e) {
+      print('Voice Parse API Error: $e');
       return null;
     }
   }

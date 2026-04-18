@@ -3,7 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import '../providers/language_provider.dart';
+import '../providers/theme_provider.dart';
 import '../theme/app_colors.dart';
+import '../utils/translations.dart';
 import 'form_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -82,7 +84,6 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     final language = context.watch<LanguageProvider>().languageName;
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: AppColors.background,
         title: Row(
@@ -104,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen>
               style: GoogleFonts.inter(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
-                color: AppColors.textPrimary,
+                color: Theme.of(context).textTheme.bodyLarge?.color,
                 letterSpacing: 1,
               ),
             ),
@@ -112,19 +113,62 @@ class _HomeScreenState extends State<HomeScreen>
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(
-                color: AppColors.surfaceVariant,
-                borderRadius: BorderRadius.circular(20),
+            padding: const EdgeInsets.only(right: 8),
+            child: IconButton(
+              icon: Icon(
+                context.watch<ThemeProvider>().themeMode == ThemeMode.dark
+                    ? Icons.light_mode_rounded
+                    : Icons.dark_mode_rounded,
+                color: AppColors.primary,
+                size: 22,
               ),
-              child: Text(
-                language,
-                style: GoogleFonts.inter(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.primary,
+              onPressed: () => context.read<ThemeProvider>().toggleTheme(),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: PopupMenuButton<String>(
+              color: AppColors.surface,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              onSelected: (String code) async {
+                final names = {'hi-IN': 'Hindi', 'kn-IN': 'Kannada', 'en-US': 'English'};
+                await context.read<LanguageProvider>().setLanguage(code, names[code]!);
+              },
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                const PopupMenuItem<String>(
+                  value: 'hi-IN',
+                  child: Text('हिंदी (Hindi)'),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'kn-IN',
+                  child: Text('ಕನ್ನಡ (Kannada)'),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'en-US',
+                  child: Text('English'),
+                ),
+              ],
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  children: [
+                    Text(
+                      language,
+                      style: GoogleFonts.inter(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    const Icon(Icons.arrow_drop_down_rounded, size: 16, color: AppColors.primary),
+                  ],
                 ),
               ),
             ),
@@ -132,10 +176,11 @@ class _HomeScreenState extends State<HomeScreen>
         ],
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            children: [
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Column(
+              children: [
               const SizedBox(height: 20),
               Container(
                 width: double.infinity,
@@ -161,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen>
                       style: GoogleFonts.inter(
                         fontSize: 22,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.textPrimary,
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                       ),
                     ),
                     const SizedBox(height: 6),
@@ -169,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen>
                       'Discover government welfare schemes you qualify for using AI',
                       style: GoogleFonts.inter(
                         fontSize: 13,
-                        color: AppColors.textSecondary,
+                        color: Theme.of(context).textTheme.bodyMedium?.color,
                       ),
                     ),
                   ],
@@ -241,21 +286,21 @@ class _HomeScreenState extends State<HomeScreen>
                   width: double.infinity,
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: AppColors.surface,
+                    color: Theme.of(context).colorScheme.surface,
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: AppColors.border),
+                    border: Border.all(color: Theme.of(context).dividerColor),
                   ),
                   child: Text(
                     '"$_transcribedText"',
                     style: GoogleFonts.inter(
                       fontSize: 15,
-                      color: AppColors.textPrimary,
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                       fontStyle: FontStyle.italic,
                     ),
                     textAlign: TextAlign.center,
                   ),
                 ),
-              const Spacer(),
+              const SizedBox(height: 24),
               _QuickStatRow(),
               const SizedBox(height: 20),
               ElevatedButton.icon(
@@ -270,7 +315,7 @@ class _HomeScreenState extends State<HomeScreen>
                   );
                 },
                 icon: const Icon(Icons.edit_note_rounded, size: 22),
-                label: const Text('Fill Eligibility Form'),
+                label: Text(TranslationHelper.t('Fill Eligibility Form', language)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   foregroundColor: Colors.white,
@@ -301,6 +346,7 @@ class _HomeScreenState extends State<HomeScreen>
               const SizedBox(height: 24),
             ],
           ),
+        ),
         ),
       ),
     );
@@ -333,9 +379,9 @@ class _StatChip extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: AppColors.border),
+          border: Border.all(color: Theme.of(context).dividerColor),
         ),
         child: Column(
           children: [

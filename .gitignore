@@ -1,0 +1,19 @@
+# Virtual Environments
+venv/
+backend/venv/
+
+# Environment Variables
+.env
+backend/.env
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# IDEs
+.idea/
+.vscode/
+
+# Ignore flutter build files inside vaani_seva (if flutter doesn't already have its own gitignore)
+vaani_seva/build/
+vaani_seva/.dart_tool/

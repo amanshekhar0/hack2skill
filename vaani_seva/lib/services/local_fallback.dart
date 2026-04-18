@@ -39,9 +39,20 @@ class LocalFallback {
       schemes.add('General Welfare Assistance');
     }
 
-    String message = eligible
-        ? 'Aap eligibility criteria ko pura karte hain. Kripya nazdiki Jan Seva Kendra se sampark karein.'
-        : 'Abhi aap in yojanaon ke liye yogya nahi hain. Aapki aay ya bhumi size ki sima paar nahi hui hai.';
+    String message;
+    if (req.language == 'Kannada') {
+      message = eligible
+          ? "ಅರ್ಹತೆಯ ಮಾನದಂಡಗಳನ್ನು ನೀವು ಪೂರೈಸುತ್ತೀರಿ. ದಯವಿಟ್ಟು ನಿಮ್ಮ ಸಮೀಪದ ಜನ ಸೇವಾ ಕೇಂದ್ರವನ್ನು ಸಂಪರ್ಕಿಸಿ."
+          : "ಪ್ರಸ್ತುತ ನೀವು ಯೋಜನೆಗಳಿಗೆ ಅರ್ಹರಾಗಿಲ್ಲ. ನಿಮ್ಮ ಆದಾಯ ಅಥವಾ ಭೂಮಿಯ ಮಿತಿ ಮೀರಿದೆ.";
+    } else if (req.language == 'Hindi') {
+      message = eligible
+          ? "आप पात्रता मानदंडों को पूरा करते हैं। कृपया निकटतम जन सेवा केंद्र से संपर्क करें।"
+          : "वर्तमान में आप योजनाओं के लिए पात्र नहीं हैं। आपकी आय या भूमि सीमा पार हो गई है।";
+    } else {
+      message = eligible
+          ? 'You meet the eligibility criteria. Please contact your nearest Jan Seva Kendra.'
+          : 'You are currently not eligible for these schemes. Your income or land size exceeds the limit.';
+    }
 
     return PredictionResponse(
       isEligible: eligible,

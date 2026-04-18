@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../providers/language_provider.dart';
+import '../providers/theme_provider.dart';
 import '../theme/app_colors.dart';
 import 'home_screen.dart';
 
@@ -58,13 +59,28 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 28),
-          child: Column(
-            children: [
-              const Spacer(flex: 2),
+        child: Stack(
+          children: [
+            Positioned(
+              top: 16,
+              right: 16,
+              child: IconButton(
+                icon: Icon(
+                  context.watch<ThemeProvider>().themeMode == ThemeMode.dark
+                      ? Icons.light_mode_rounded
+                      : Icons.dark_mode_rounded,
+                  color: AppColors.primary,
+                  size: 26,
+                ),
+                onPressed: () => context.read<ThemeProvider>().toggleTheme(),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 28),
+              child: Column(
+                children: [
+                  const Spacer(flex: 2),
               ScaleTransition(
                 scale: _scaleAnim,
                 child: FadeTransition(
@@ -101,7 +117,7 @@ class _SplashScreenState extends State<SplashScreen>
                         style: GoogleFonts.inter(
                           fontSize: 32,
                           fontWeight: FontWeight.w800,
-                          color: AppColors.textPrimary,
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
                           letterSpacing: 1.5,
                         ),
                       ),
@@ -152,7 +168,7 @@ class _SplashScreenState extends State<SplashScreen>
                         style: GoogleFonts.inter(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimary,
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
                         ),
                       ),
                       const SizedBox(height: 6),
@@ -200,6 +216,8 @@ class _SplashScreenState extends State<SplashScreen>
             ],
           ),
         ),
+          ],
+        ),
       ),
     );
   }
@@ -225,7 +243,7 @@ class _LanguageButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         decoration: BoxDecoration(
-          color: AppColors.background,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(15),
           border: Border.all(color: AppColors.border),
           boxShadow: [
@@ -249,7 +267,7 @@ class _LanguageButton extends StatelessWidget {
                     style: GoogleFonts.inter(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimary,
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                     ),
                   ),
                   Text(

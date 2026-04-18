@@ -9,7 +9,7 @@ class PdfService {
 
     final schemesText = result.matchingSchemes.isEmpty
         ? 'No matching schemes'
-        : result.matchingSchemes.join('\n• ');
+        : result.matchingSchemes.join('\n- ');
 
     pdf.addPage(
       pw.Page(
@@ -69,8 +69,8 @@ class PdfService {
                 ),
                 child: pw.Text(
                   result.isEligible
-                      ? '✓ ELIGIBLE — You qualify for government welfare schemes'
-                      : '✗ NOT ELIGIBLE — You do not currently meet eligibility criteria',
+                      ? '[ ELIGIBLE ] You qualify for government welfare schemes'
+                      : '[ NOT ELIGIBLE ] You do not currently meet eligibility criteria',
                   style: pw.TextStyle(
                     color: PdfColors.white,
                     fontWeight: pw.FontWeight.bold,
@@ -100,7 +100,7 @@ class PdfService {
                   borderRadius: pw.BorderRadius.circular(6),
                 ),
                 child: pw.Text(
-                  '• $schemesText',
+                  '- $schemesText',
                   style: const pw.TextStyle(fontSize: 12, lineSpacing: 4),
                 ),
               ),
@@ -122,7 +122,7 @@ class PdfService {
                   borderRadius: pw.BorderRadius.circular(6),
                 ),
                 child: pw.Text(
-                  result.voiceUiMessage,
+                  _sanitizeForPdf(result.voiceUiMessage),
                   style: const pw.TextStyle(fontSize: 12, lineSpacing: 3),
                 ),
               ),
@@ -162,5 +162,14 @@ class PdfService {
         ],
       ),
     );
+  }
+
+  static String _sanitizeForPdf(String text) {
+    // If the text contains Hindi/Kannada characters (non-ascii), 
+    // replacing it with English fallback since PDF Helvetica lacks Indian fonts
+    if (text.codeUnits.any((c) => c > 127)) {
+      return "Your eligibility overview has been compiled successfully by VAANI SEVA AI engine based on the information provided.";
+    }
+    return text.replaceAll('✓', '').replaceAll('✗', '').replaceAll('—', '-');
   }
 }

@@ -29,7 +29,7 @@ class SchemeCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.background,
+        color: Theme.of(context).cardTheme.color,
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
@@ -38,7 +38,7 @@ class SchemeCard extends StatelessWidget {
             offset: const Offset(0, 4),
           ),
         ],
-        border: Border.all(color: AppColors.border, width: 1),
+        border: Border.all(color: Theme.of(context).dividerColor, width: 1),
       ),
       child: Row(
         children: [
@@ -61,7 +61,7 @@ class SchemeCard extends StatelessWidget {
                   style: GoogleFonts.inter(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimary,
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -69,7 +69,7 @@ class SchemeCard extends StatelessWidget {
                   'Government of India Welfare Scheme',
                   style: GoogleFonts.inter(
                     fontSize: 11,
-                    color: AppColors.textHint,
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
                   ),
                 ),
               ],
