@@ -4,7 +4,7 @@ import '../models/prediction_response.dart';
 class LocalFallback {
   static PredictionResponse evaluate(PredictionRequest req) {
     double score = 0.0;
-    List<String> schemes = [];
+    List<Map<String, dynamic>> schemes = [];
 
     if (req.income < 100000) score += 0.3;
     else if (req.income < 300000) score += 0.15;
@@ -19,24 +19,31 @@ class LocalFallback {
     score = score.clamp(0.0, 1.0);
     bool eligible = score >= 0.4;
 
+    Map<String, dynamic> createScheme(String name) => {
+          'name': name,
+          'benefit': 'Welfare benefit available offline',
+          'apply_link': 'https://www.india.gov.in',
+          'documents': ['Aadhaar Card', 'Ration Card'],
+        };
+
     if (req.isRural == 1 && req.income < 200000) {
-      schemes.add('PM Kisan Samman Nidhi');
+      schemes.add(createScheme('PM Kisan Samman Nidhi'));
     }
     if (req.houseType == 0 && req.income < 300000) {
-      schemes.add('PM Awas Yojana (Gramin)');
+      schemes.add(createScheme('PM Awas Yojana (Gramin)'));
     }
     if (req.age >= 60 && req.isGovtEmp == 0) {
-      schemes.add('Indira Gandhi National Old Age Pension');
+      schemes.add(createScheme('Indira Gandhi National Old Age Pension'));
     }
     if (req.income < 150000 && req.isTaxpayer == 0) {
-      schemes.add('Ayushman Bharat - PM Jan Arogya Yojana');
+      schemes.add(createScheme('Ayushman Bharat - PM Jan Arogya Yojana'));
     }
     if (req.landSize < 0.5) {
-      schemes.add('PM Fasal Bima Yojana');
+      schemes.add(createScheme('PM Fasal Bima Yojana'));
     }
 
     if (schemes.isEmpty && eligible) {
-      schemes.add('General Welfare Assistance');
+      schemes.add(createScheme('General Welfare Assistance'));
     }
 
     String message;

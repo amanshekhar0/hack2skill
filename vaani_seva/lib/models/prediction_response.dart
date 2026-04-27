@@ -2,7 +2,7 @@ class PredictionResponse {
   final bool isEligible;
   final double eligibilityScore;
   final String voiceUiMessage;
-  final List<String> matchingSchemes;
+  final List<Map<String, dynamic>> matchingSchemes;
 
   PredictionResponse({
     required this.isEligible,
@@ -17,7 +17,7 @@ class PredictionResponse {
       eligibilityScore: (json['eligibility_score'] as num?)?.toDouble() ?? 0.0,
       voiceUiMessage: json['voice_ui_message'] as String? ?? '',
       matchingSchemes: (json['matching_schemes'] as List<dynamic>?)
-              ?.map((e) => e.toString())
+              ?.map((e) => Map<String, dynamic>.from(e as Map))
               .toList() ??
           [],
     );

@@ -190,8 +190,9 @@ class _ResultsScreenState extends State<ResultsScreen> {
                     const SizedBox(height: 14),
                     ...result.matchingSchemes.asMap().entries.map(
                           (e) => SchemeCard(
-                            schemeName: e.value,
+                            schemeData: e.value,
                             index: e.key,
+                            requestData: provider.request,
                           ),
                         ),
                   ],
