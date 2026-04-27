@@ -55,26 +55,39 @@ class _SchemeCardState extends State<SchemeCard> {
     setState(() => _isLoadingGuide = true);
     
     try {
-      final guideText = await ApiService.generateGuide(widget.requestData!);
+      var guideText = await ApiService.generateGuide(widget.requestData!);
+      
+      // Fallback: Use direct Gemini API if backend fails
+      if (guideText == null) {
+        print('Backend guide generation failed, trying direct Gemini fallback...');
+        guideText = await ApiService.generateGuideDirectly(
+          widget.requestData!, 
+          widget.schemeData['name'] ?? 'Scheme'
+        );
+      }
+
       if (!mounted) return;
       
       if (guideText != null) {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('Application Guide'),
-            content: SingleChildScrollView(child: Text(guideText)),
+            title: const Text('Application Guide (Powered by AI)'),
+            content: SingleChildScrollView(
+              child: SelectableText(guideText!),
+            ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
                 child: const Text('Close'),
               )
             ],
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           ),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to generate guide.')),
+          const SnackBar(content: Text('Failed to generate guide even with fallback.')),
         );
       }
     } catch (e) {
