@@ -6,18 +6,29 @@ import '../models/prediction_request.dart';
 import '../models/prediction_response.dart';
 
 class ApiService {
-  static const String _rawBaseUrl = 'https://volatilisable-demetrice-unchambered.ngrok-free.dev';
+  /// Build-time configurable:
+  /// `flutter build web --dart-define=API_BASE_URL=https://your-backend.example`
+  static const String _rawBaseUrl =
+      String.fromEnvironment('API_BASE_URL', defaultValue: 'https://volatilisable-demetrice-unchambered.ngrok-free.dev');
   static String get _baseUrl => _rawBaseUrl.endsWith('/') 
       ? _rawBaseUrl.substring(0, _rawBaseUrl.length - 1) 
       : _rawBaseUrl;
       
   static const Duration _timeout = Duration(seconds: 15);
 
-  static final Map<String, String> _headers = {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-    'ngrok-skip-browser-warning': 'true',
-  };
+  static Map<String, String> get _headers {
+    final headers = <String, String>{
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    };
+
+    // Only needed for ngrok tunnels.
+    if (_baseUrl.contains('ngrok')) {
+      headers['ngrok-skip-browser-warning'] = 'true';
+    }
+
+    return headers;
+  }
 
   static Future<bool> checkHealth() async {
     try {

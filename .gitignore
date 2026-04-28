@@ -17,3 +17,7 @@ __pycache__/
 # Ignore flutter build files inside vaani_seva (if flutter doesn't already have its own gitignore)
 vaani_seva/build/
 vaani_seva/.dart_tool/
+
+# Local scratch / temporary backend copies
+temp_sadhu_app.py
+temp_sadhu_app_utf8.py
