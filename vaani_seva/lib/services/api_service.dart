@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../models/prediction_request.dart';
 import '../models/prediction_response.dart';
@@ -14,7 +15,28 @@ class ApiService {
       ? _rawBaseUrl.substring(0, _rawBaseUrl.length - 1) 
       : _rawBaseUrl;
       
-  static const Duration _timeout = Duration(seconds: 15);
+  // Render/hosted backends can cold-start and Gemini can be slow.
+  // Use longer timeouts on web to avoid false "offline mode".
+  static Duration get _timeout => kIsWeb ? const Duration(seconds: 60) : const Duration(seconds: 25);
+  static Duration get _aiTimeout => kIsWeb ? const Duration(seconds: 120) : const Duration(seconds: 60);
+
+  static Future<http.Response> _withRetry(
+    Future<http.Response> Function() request, {
+    required Duration timeout,
+    int retries = 1,
+  }) async {
+    Object? lastError;
+    for (var attempt = 0; attempt <= retries; attempt++) {
+      try {
+        return await request().timeout(timeout);
+      } catch (e) {
+        lastError = e;
+        if (attempt >= retries) rethrow;
+        await Future.delayed(const Duration(milliseconds: 600));
+      }
+    }
+    throw lastError ?? Exception('Request failed');
+  }
 
   static Map<String, String> get _headers {
     final headers = <String, String>{
@@ -32,9 +54,11 @@ class ApiService {
 
   static Future<bool> checkHealth() async {
     try {
-      final response = await http
-          .get(Uri.parse('$_baseUrl/health'), headers: _headers)
-          .timeout(_timeout);
+      final response = await _withRetry(
+        () => http.get(Uri.parse('$_baseUrl/health'), headers: _headers),
+        timeout: _timeout,
+        retries: 1,
+      );
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         return data['status'] == 'healthy';
@@ -51,13 +75,15 @@ class ApiService {
       print('Calling API: $url');
       print('Request Body: ${jsonEncode(request.toJson())}');
       
-      final response = await http
-          .post(
-            Uri.parse(url),
-            headers: _headers,
-            body: jsonEncode(request.toJson()),
-          )
-          .timeout(_timeout);
+      final response = await _withRetry(
+        () => http.post(
+          Uri.parse(url),
+          headers: _headers,
+          body: jsonEncode(request.toJson()),
+        ),
+        timeout: _timeout,
+        retries: 1,
+      );
 
       print('API Response Status: ${response.statusCode}');
       
@@ -82,11 +108,15 @@ class ApiService {
 
   static Future<Map<String, dynamic>?> parseSpeech(String text) async {
     try {
-      final response = await http.post(
-        Uri.parse('$_baseUrl/parse_voice'),
-        headers: _headers,
-        body: jsonEncode({"text": text}),
-      ).timeout(_timeout);
+      final response = await _withRetry(
+        () => http.post(
+          Uri.parse('$_baseUrl/parse_voice'),
+          headers: _headers,
+          body: jsonEncode({"text": text}),
+        ),
+        timeout: _aiTimeout,
+        retries: 0,
+      );
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -103,9 +133,11 @@ class ApiService {
 
   static Future<List<Map<String, dynamic>>> fetchSchemes() async {
     try {
-      final response = await http
-          .get(Uri.parse('$_baseUrl/schemes'), headers: _headers)
-          .timeout(_timeout);
+      final response = await _withRetry(
+        () => http.get(Uri.parse('$_baseUrl/schemes'), headers: _headers),
+        timeout: _timeout,
+        retries: 1,
+      );
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data is List) {
@@ -120,13 +152,15 @@ class ApiService {
 
   static Future<String?> generateGuide(PredictionRequest request) async {
     try {
-      final response = await http
-          .post(
-            Uri.parse('$_baseUrl/generate_guide'),
-            headers: _headers,
-            body: jsonEncode(request.toJson()),
-          )
-          .timeout(_timeout);
+      final response = await _withRetry(
+        () => http.post(
+          Uri.parse('$_baseUrl/generate_guide'),
+          headers: _headers,
+          body: jsonEncode(request.toJson()),
+        ),
+        timeout: _aiTimeout,
+        retries: 0,
+      );
 
       if (response.statusCode == 200) {
         return utf8.decode(response.bodyBytes);
