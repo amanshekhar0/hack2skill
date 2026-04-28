@@ -172,12 +172,14 @@ class AppTheme {
       colorScheme: ColorScheme.fromSeed(
         seedColor: AppColors.primary,
         brightness: Brightness.dark,
-        surface: const Color(0xFF1E1E2A),
+        surface: const Color(0xFF161B22),
+        onSurface: Colors.white,
         primary: AppColors.primaryLight,
+        onPrimary: Colors.white,
         secondary: AppColors.success,
         error: AppColors.error,
       ),
-      scaffoldBackgroundColor: const Color(0xFF12121A),
+      scaffoldBackgroundColor: const Color(0xFF0D1117),
       textTheme: GoogleFonts.interTextTheme().copyWith(
         displayLarge: GoogleFonts.inter(
           fontSize: 32,
@@ -198,17 +200,17 @@ class AppTheme {
         titleMedium: GoogleFonts.inter(
           fontSize: 16,
           fontWeight: FontWeight.w600,
-          color: Colors.white,
+          color: const Color(0xFFE6EDF3),
         ),
         bodyLarge: GoogleFonts.inter(
           fontSize: 16,
           fontWeight: FontWeight.w400,
-          color: Colors.white,
+          color: const Color(0xFFE6EDF3),
         ),
         bodyMedium: GoogleFonts.inter(
           fontSize: 14,
           fontWeight: FontWeight.w400,
-          color: const Color(0xFF9AA0A6),
+          color: const Color(0xFF8B949E),
         ),
         labelLarge: GoogleFonts.inter(
           fontSize: 14,
@@ -217,17 +219,17 @@ class AppTheme {
           letterSpacing: 0.5,
         ),
       ),
-      appBarTheme: AppBarTheme(
-        backgroundColor: const Color(0xFF12121A),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Color(0xFF0D1117),
         elevation: 0,
         scrolledUnderElevation: 1,
         shadowColor: Colors.black54,
-        titleTextStyle: GoogleFonts.inter(
+        titleTextStyle: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.w700,
           color: Colors.white,
         ),
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -248,14 +250,14 @@ class AppTheme {
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: const Color(0xFF1E1E2A),
+        fillColor: const Color(0xFF161B22),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFF2B2B36)),
+          borderSide: const BorderSide(color: Color(0xFF30363D)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFF2B2B36)),
+          borderSide: const BorderSide(color: Color(0xFF30363D)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -267,28 +269,29 @@ class AppTheme {
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         hintStyle: GoogleFonts.inter(
-          color: const Color(0xFF7A8086),
+          color: const Color(0xFF484F58),
           fontSize: 15,
         ),
         labelStyle: GoogleFonts.inter(
-          color: const Color(0xFF9AA0A6),
+          color: const Color(0xFF8B949E),
           fontSize: 14,
           fontWeight: FontWeight.w500,
         ),
       ),
       cardTheme: CardThemeData(
         elevation: 0,
-        color: const Color(0xFF1E1E2A),
+        color: const Color(0xFF161B22),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
+          side: const BorderSide(color: Color(0xFF30363D), width: 1),
         ),
       ),
       dividerTheme: const DividerThemeData(
-        color: Color(0xFF2B2B36),
+        color: Color(0xFF30363D),
         thickness: 1,
       ),
       snackBarTheme: SnackBarThemeData(
-        backgroundColor: const Color(0xFF2B2B36),
+        backgroundColor: const Color(0xFF21262D),
         contentTextStyle: GoogleFonts.inter(
           color: Colors.white,
           fontSize: 14,

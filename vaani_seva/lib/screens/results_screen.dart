@@ -108,7 +108,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.volume_up_rounded, color: AppColors.primary),
+            icon: Icon(Icons.volume_up_rounded, color: Theme.of(context).colorScheme.primary),
             tooltip: 'Replay voice message',
             onPressed: () {
               _hasSpokeResult = false;
@@ -145,15 +145,15 @@ class _ResultsScreenState extends State<ResultsScreen> {
                         children: [
                           Row(
                             children: [
-                              const Icon(Icons.record_voice_over_rounded,
-                                  color: AppColors.primary, size: 18),
+                              Icon(Icons.record_voice_over_rounded,
+                                  color: Theme.of(context).colorScheme.primary, size: 18),
                               const SizedBox(width: 8),
                               Text(
                                 TranslationHelper.t('AI Message', context.read<LanguageProvider>().languageName),
                                 style: GoogleFonts.inter(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w700,
-                                  color: AppColors.primary,
+                                  color: Theme.of(context).colorScheme.primary,
                                 ),
                               ),
                             ],
@@ -174,8 +174,8 @@ class _ResultsScreenState extends State<ResultsScreen> {
                     const SizedBox(height: 24),
                     Row(
                       children: [
-                        const Icon(Icons.category_rounded,
-                            color: AppColors.primary, size: 18),
+                        Icon(Icons.category_rounded,
+                            color: Theme.of(context).colorScheme.primary, size: 18),
                         const SizedBox(width: 8),
                         Text(
                           TranslationHelper.t('Matching Schemes', context.read<LanguageProvider>().languageName) + ' (${result.matchingSchemes.length})',
@@ -202,7 +202,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                     icon: const Icon(Icons.picture_as_pdf_rounded),
                     label: Text(TranslationHelper.t('Generate Documents', context.read<LanguageProvider>().languageName)),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF0D47A1),
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                       foregroundColor: Colors.white,
                       minimumSize: const Size(double.infinity, 54),
                       shape: RoundedRectangleBorder(

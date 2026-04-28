@@ -133,21 +133,43 @@ class _HomeScreenState extends State<HomeScreen>
                 borderRadius: BorderRadius.circular(15),
               ),
               onSelected: (String code) async {
-                final names = {'hi-IN': 'Hindi', 'kn-IN': 'Kannada', 'en-US': 'English'};
-                await context.read<LanguageProvider>().setLanguage(code, names[code]!);
+                String newName;
+                switch (code) {
+                  case 'hi-IN':
+                    newName = 'Hindi';
+                    break;
+                  case 'kn-IN':
+                    newName = 'Kannada';
+                    break;
+                  case 'en-US':
+                  default:
+                    newName = 'English';
+                    break;
+                }
+                
+                await context.read<LanguageProvider>().setLanguage(code, newName);
+                
+                if (!mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Language successfully changed to $newName'),
+                    backgroundColor: AppColors.primary,
+                    duration: const Duration(seconds: 1),
+                  ),
+                );
               },
               itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
                 const PopupMenuItem<String>(
+                  value: 'en-US',
+                  child: Text('English'),
+                ),
+                const PopupMenuItem<String>(
                   value: 'hi-IN',
-                  child: Text('हिंदी (Hindi)'),
+                  child: Text('Hindi (हिंदी)'),
                 ),
                 const PopupMenuItem<String>(
                   value: 'kn-IN',
-                  child: Text('ಕನ್ನಡ (Kannada)'),
-                ),
-                const PopupMenuItem<String>(
-                  value: 'en-US',
-                  child: Text('English'),
+                  child: Text('Kannada (ಕನ್ನಡ)'),
                 ),
               ],
               child: Container(
@@ -225,7 +247,7 @@ class _HomeScreenState extends State<HomeScreen>
                 _isListening ? 'Bol rahe hain...' : 'Mic dabao aur bolein',
                 style: GoogleFonts.inter(
                   fontSize: 14,
-                  color: _isListening ? AppColors.primary : AppColors.textSecondary,
+                  color: _isListening ? AppColors.primary : Theme.of(context).textTheme.bodyMedium?.color,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -392,7 +414,7 @@ class _StatChip extends StatelessWidget {
               style: GoogleFonts.inter(
                 fontSize: 10,
                 fontWeight: FontWeight.w600,
-                color: AppColors.textSecondary,
+                color: Theme.of(context).textTheme.bodyMedium?.color,
               ),
               textAlign: TextAlign.center,
             ),

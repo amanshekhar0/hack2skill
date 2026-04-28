@@ -13,41 +13,11 @@ class ApiService {
       
   static const Duration _timeout = Duration(seconds: 15);
 
-  static const String _geminiApiKey = ''; // ADD YOUR KEY HERE FOR LOCAL TESTING
-
   static final Map<String, String> _headers = {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
     'ngrok-skip-browser-warning': 'true',
   };
-
-  static Future<String?> generateGuideDirectly(PredictionRequest request, String schemeName) async {
-    try {
-      final prompt = """
-      You are an AI assistant for VAANI SEVA, helping rural citizens apply for government schemes.
-      Generate a simple, step-by-step guide for the scheme: $schemeName.
-      User Details: Age: ${request.age}, Income: ${request.income}, Land: ${request.landSize}.
-      The guide should be in ${request.language ?? 'English'} and very easy to understand for an uneducated person.
-      """;
-
-      final response = await http.post(
-        Uri.parse('https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=$_geminiApiKey'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          "contents": [{"parts": [{"text": prompt}]}]
-        }),
-      ).timeout(_timeout);
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        return data['candidates'][0]['content']['parts'][0]['text'];
-      }
-      return null;
-    } catch (e) {
-      print('Direct Gemini Error: $e');
-      return null;
-    }
-  }
 
   static Future<bool> checkHealth() async {
     try {

@@ -55,26 +55,17 @@ class _SchemeCardState extends State<SchemeCard> {
     setState(() => _isLoadingGuide = true);
     
     try {
-      var guideText = await ApiService.generateGuide(widget.requestData!);
+      final guideText = await ApiService.generateGuide(widget.requestData!);
       
-      // Fallback: Use direct Gemini API if backend fails
-      if (guideText == null) {
-        print('Backend guide generation failed, trying direct Gemini fallback...');
-        guideText = await ApiService.generateGuideDirectly(
-          widget.requestData!, 
-          widget.schemeData['name'] ?? 'Scheme'
-        );
-      }
-
       if (!mounted) return;
       
       if (guideText != null) {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('Application Guide (Powered by AI)'),
+            title: const Text('Application Guide'),
             content: SingleChildScrollView(
-              child: SelectableText(guideText!),
+              child: SelectableText(guideText),
             ),
             actions: [
               TextButton(
@@ -87,7 +78,7 @@ class _SchemeCardState extends State<SchemeCard> {
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to generate guide even with fallback.')),
+          const SnackBar(content: Text('Failed to generate guide.')),
         );
       }
     } catch (e) {
@@ -256,8 +247,8 @@ class _SchemeCardState extends State<SchemeCard> {
                           ),
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
-                            backgroundColor: AppColors.primary.withOpacity(0.1),
-                            foregroundColor: AppColors.primary,
+                            backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.12),
+                            foregroundColor: Theme.of(context).colorScheme.primary,
                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                           ),
                         ),

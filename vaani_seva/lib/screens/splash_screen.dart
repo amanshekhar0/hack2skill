@@ -181,6 +181,13 @@ class _SplashScreenState extends State<SplashScreen>
                       ),
                       const SizedBox(height: 28),
                       _LanguageButton(
+                        flag: '🇬🇧',
+                        language: 'English',
+                        subtitle: 'English',
+                        onTap: () => _selectLanguage('en-US', 'English'),
+                      ),
+                      const SizedBox(height: 14),
+                      _LanguageButton(
                         flag: '🇮🇳',
                         language: 'हिंदी',
                         subtitle: 'Hindi',
@@ -192,13 +199,6 @@ class _SplashScreenState extends State<SplashScreen>
                         language: 'ಕನ್ನಡ',
                         subtitle: 'Kannada',
                         onTap: () => _selectLanguage('kn-IN', 'Kannada'),
-                      ),
-                      const SizedBox(height: 14),
-                      _LanguageButton(
-                        flag: '🇬🇧',
-                        language: 'English',
-                        subtitle: 'English',
-                        onTap: () => _selectLanguage('en-US', 'English'),
                       ),
                     ],
                   ),
