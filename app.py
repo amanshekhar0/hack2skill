@@ -410,6 +410,19 @@ who has never visited a government office. Be warm, patient and encouraging.
         return "Guide could not be generated. Please try again."
 
 # ── 11. ROUTES ───────────────────────────────────────────────────
+@app.route('/')
+def home():
+    return {
+        "message": "Vaani Seva API is running",
+        "endpoints": [
+            "/predict",
+            "/generate_guide",
+            "/health",
+            "/schemes",
+            "/languages"
+        ]
+    }
+
 
 @app.route('/predict', methods=['POST'])
 def predict():
