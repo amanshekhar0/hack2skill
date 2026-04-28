@@ -2,9 +2,9 @@ VAANI SEVA 🇮🇳
 VAANI SEVA is a cutting-edge, AI-powered platform designed to bridge the gap between complex government welfare schemes and the citizens who need them most. By leveraging Machine Learning and real-time data, the platform predicts eligibility and provides personalized guidance to ensure no one misses out on essential benefits.
 
 🚀 Live Links
-Frontend: vaaniseva.vercel.app
+Frontend: https://vaaniseva.vercel.app
 
-Backend API: vaaniseva.onrender.com
+Backend API: https://vaaniseva.onrender.com
 
 ✨ Features
 Eligibility Prediction: Uses an XGBoost machine learning model to analyze user demographics and predict high-probability matches for government schemes.
